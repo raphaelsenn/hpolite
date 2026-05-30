@@ -32,8 +32,8 @@ from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 
 from hpolite import BayesianSearchCV, Categorical, Real
-from microhpo.aquisition import EI, # or PI, ES, KG, TS 
-from microhpo.surrogates import GaussianProcess # or RandomForest
+from hpolite.aquisition import EI, # or PI, ES, KG, TS 
+from hpolite.surrogates import GaussianProcess # or RandomForest
 
 X, y = load_breast_cancer(return_X_y=True)  
 X_train, X_test, y_train, y_test = train_test_split(
