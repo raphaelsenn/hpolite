@@ -1,7 +1,7 @@
 # hpolite
 You are interested in hyperparameter optimization? You like micrograd? Then You love hpolite!
 
-A tiny (educational) Hyperparameter optimization libary that is builts on top of sklearn.
+A tiny (educational) Hyperparameter optimization libary that builts on top of sklearn.
 
 hpolite implements the following optimizers:
 
