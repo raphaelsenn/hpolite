@@ -8,6 +8,8 @@ hpolite implements the following optimizers:
 * GridSearchCV
 * RandomSearchCV
 * BayesianSearchCV
+* HalvingRandomSearchCV  (multi-fidelity algorithm)
+* HyperbandSearchCV  (multi-fidelity algorithm)
 
 hpolite implements the following surrogate models:
 
