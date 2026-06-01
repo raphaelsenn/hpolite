@@ -84,7 +84,7 @@ class BayesianSearchCV(BaseOptimizer):
             params_enc = self._encode_candidate(params)     # [1, D], (np.ndarray)
 
             # Evaluate inital candidate
-            score = self._evaluate_candidate(params)
+            score = self._evaluate_candidate(params, X, y)
 
             # Update observations
             X_candidates.append(params_enc)
@@ -104,7 +104,7 @@ class BayesianSearchCV(BaseOptimizer):
             params_enc = self._encode_candidate(params)
 
             # Evaluate hyperparameter configuration
-            score = self._evaluate_candidate(params)
+            score = self._evaluate_candidate(params, X, y)
 
             # Update observations
             X_candidates = np.concatenate([X_candidates, np.asarray([params_enc])]) # [N, D]
