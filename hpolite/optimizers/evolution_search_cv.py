@@ -120,9 +120,12 @@ class EvolutionSearchCV(BaseOptimizer):
             population: List[Dict[str, Any]], 
             fitness: List[float]
     ) -> List[Dict[str, Any]]:
-        keep = np.argsort(fitness)[:self.population_size]
+        order = np.argsort(fitness)[::-1]
+        keep = order[:self.population_size] 
+        
         population = [population[id] for id in keep]
         fitness = [fitness[id] for id in keep]
+
         return population, fitness
 
     def fit(self, X: np.ndarray, y: np.ndarray | None = None) -> EvolutionSearchCV:
@@ -136,14 +139,16 @@ class EvolutionSearchCV(BaseOptimizer):
 
         for _ in range(self.n_generations):
             parents = self._select_parents(population, fitness)
-
             for params in parents:
-                if self.rng.random() < self.mutation_crossover_probability:
-                    params = self._mutate(params)
-                else:
-                    other = self.rng.choice(parents)
-                    params = self._crossover(params, other)
-                
+                # Mutation 
+                params = self._mutate(params)
+
+                # Crossover 
+                other_id = self.rng.choice(len(parents))
+                other = parents[other_id]
+                params = self._crossover(params, other)
+
+                # Evaluate
                 score = self._evaluate_candidate(params, X, y)
                 population.append(params)
                 fitness.append(score)
