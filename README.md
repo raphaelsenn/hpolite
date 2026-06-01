@@ -3,18 +3,19 @@ You are interested in hyperparameter optimization? You like micrograd? Then You 
 
 A tiny (educational) Hyperparameter optimization libary that builts on top of sklearn.
 
-hpolite implements the following optimizers:
+hpolite implements the following search algorithms:
 
 * GridSearchCV
 * RandomSearchCV
-* BayesianSearchCV
-* HalvingRandomSearchCV  (multi-fidelity algorithm)
-* HyperbandSearchCV  (multi-fidelity algorithm)
+* BayesianSearchCV (Bayesian optimization)
+* HalvingRandomSearchCV  (Multi-fidelity algorithm)
+* HyperbandSearchCV  (Multi-fidelity algorithm)
+* EvolutionSearchCV (Genetic algorithm)
 
 hpolite implements the following surrogate models:
 
 * GaussianProcess
-* RandomForest
+* RandomForest (TODO)
 * Bayesian Neural Network (TODO)
 
 hpolite implements the following aquisition functions:
