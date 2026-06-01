@@ -40,28 +40,8 @@ class EvolutionSearchCV(BaseOptimizer):
         self.random_state = random_state
         self.rng = np.random.default_rng(random_state) 
 
-    def _sample_candidate(self) -> Dict[str, Any]:
-        params = {}
-        for key, value in self.param_dict.items():
-            params[key] = value.sample(self.rng)
-        return params
-
     def _sample_population(self) -> List[Dict[str, Any]]:
         return [self._sample_candidate() for _ in range(self.population_size)]
-
-    def _evaluate_candidate(
-            self, 
-            params: Dict[str, Any],
-            X: np.ndarray,
-            y: np.ndarray | None
-    ) -> float:
-        model = copy.deepcopy(self.estimator) 
-        model.set_params(**params)
-
-        scores = cross_val_score(model, X, y, scoring=self.scoring, cv=self.cv)
-        score = float(np.mean(scores))
-        
-        return score
 
     def _evaluate_population(
             self, 

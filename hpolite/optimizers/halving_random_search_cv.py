@@ -53,12 +53,6 @@ class HalvingRandomSearchCV(BaseOptimizer):
         self.random_state = random_state
         self.rng = np.random.default_rng(random_state) 
 
-    def _sample_candidate(self) -> Dict[str, Any]:
-        params = {}
-        for key, value in self.param_dict.items():
-            params[key] = value.sample(self.rng)
-        return params
-
     def _sample_candidates(self) -> List[Dict[str, Any]]:
         return [self._sample_candidate() for _ in range(self.n_candidates)]
 

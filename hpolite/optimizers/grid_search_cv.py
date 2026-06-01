@@ -42,13 +42,13 @@ class GridSearchCV(BaseOptimizer):
         for params in self._param_combinations():
             model = copy.deepcopy(self.estimator)
             model.set_params(**params) 
-            
-            scores = cross_val_score(model, X, y, cv=self.cv, scoring=self.scoring)
 
-            mean_score = np.mean(scores)
-            if mean_score > self.best_score_:
+            scores = cross_val_score(model, X, y, cv=self.cv, scoring=self.scoring)
+            score = np.mean(scores)
+            
+            if score > self.best_score_:
                 self.best_params_ = params
-                self.best_score_ = mean_score
+                self.best_score_ = score
 
         model = copy.deepcopy(self.estimator)
         model.set_params(**self.best_params_)

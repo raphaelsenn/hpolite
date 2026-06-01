@@ -41,12 +41,6 @@ class BayesianSearchCV(BaseOptimizer):
         self.random_state = random_state
         self.rng = np.random.default_rng(random_state)
 
-    def _sample_candidate(self) -> Dict[str, Any]:
-        params = {}
-        for key, value in self.param_dict.items():
-            params[key] = value.sample(self.rng)
-        return params
-
     def _encode_candidate(self, params: Dict[str, Any]) -> np.ndarray:
         encoded = []
         for key in self.param_dict:
@@ -90,13 +84,11 @@ class BayesianSearchCV(BaseOptimizer):
             params_enc = self._encode_candidate(params)     # [1, D], (np.ndarray)
 
             # Evaluate inital candidate
-            model = copy.deepcopy(self.estimator)
-            model.set_params(**params)
-            scores = cross_val_score(model, X, y, scoring=self.scoring, cv=self.cv)
-            mean_score = float(np.mean(scores))
+            score = self._evaluate_candidate(params)
 
+            # Update observations
             X_candidates.append(params_enc)
-            y_scores.append(mean_score)
+            y_scores.append(score)
 
         # Initial candidate/score history
         X_candidates = np.vstack(X_candidates, dtype=np.float32)    # [n_initial_points, D]
@@ -112,17 +104,14 @@ class BayesianSearchCV(BaseOptimizer):
             params_enc = self._encode_candidate(params)
 
             # Evaluate hyperparameter configuration
-            model = copy.deepcopy(self.estimator)
-            model.set_params(**params)
-            scores = cross_val_score(model, X, y, scoring=self.scoring, cv=self.cv)
-            mean_score = float(np.mean(scores))
+            score = self._evaluate_candidate(params)
 
             # Update observations
-            X_candidates = np.concatenate([X_candidates, np.asarray([params_enc])])   # [N, D]
-            y_scores = np.concatenate([y_scores, np.asarray([mean_score])])           # [N]
+            X_candidates = np.concatenate([X_candidates, np.asarray([params_enc])]) # [N, D]
+            y_scores = np.concatenate([y_scores, np.asarray([score])])              # [N]
 
-            if mean_score >= self.best_score_:
-                self.best_score_ = mean_score
+            if score >= self.best_score_:
+                self.best_score_ = score
                 self.best_params_ = params
     
         model = copy.deepcopy(self.estimator)
