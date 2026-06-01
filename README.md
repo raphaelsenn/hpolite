@@ -87,4 +87,35 @@ print(bs.best_score_)
     chapter = {2},
     crossref = {automl}
 }
+
+@misc{jamieson2015nonstochasticbestarmidentification,
+      title={Non-stochastic Best Arm Identification and Hyperparameter Optimization}, 
+      author={Kevin Jamieson and Ameet Talwalkar},
+      year={2015},
+      eprint={1502.07943},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/1502.07943}, 
+}
+
+@misc{li2018hyperbandnovelbanditbasedapproach,
+      title={Hyperband: A Novel Bandit-Based Approach to Hyperparameter Optimization}, 
+      author={Lisha Li and Kevin Jamieson and Giulia DeSalvo and Afshin Rostamizadeh and Ameet Talwalkar},
+      year={2018},
+      eprint={1603.06560},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/1603.06560}, 
+}
+
+@misc{falkner2018bohbrobustefficienthyperparameter,
+      title={BOHB: Robust and Efficient Hyperparameter Optimization at Scale}, 
+      author={Stefan Falkner and Aaron Klein and Frank Hutter},
+      year={2018},
+      eprint={1807.01774},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/1807.01774}, 
+}
+
 ```
