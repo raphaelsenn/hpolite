@@ -25,8 +25,7 @@ class EvolutionSearchCV(BaseOptimizer):
             n_children_per_step: int = 5,
             mutation_probability: float = 0.1,
             crossover_probability: float = 0.8,
-            mutation_crossover_probability: float = 0.5,
-            selection_type: str = "neutral",    # "neutral" or "fitness"
+            selection_type: str = "neutral",
             cv = 5, 
             scoring: Callable | None = None,
             random_state: int = 0
@@ -37,7 +36,6 @@ class EvolutionSearchCV(BaseOptimizer):
         self.n_children_per_step = n_children_per_step
         self.mutation_probability = mutation_probability
         self.crossover_probability = crossover_probability
-        self.mutation_crossover_probability = mutation_crossover_probability
         self.selection_type = selection_type
         self.random_state = random_state
         self.rng = np.random.default_rng(random_state) 
@@ -101,12 +99,12 @@ class EvolutionSearchCV(BaseOptimizer):
         return params
 
     def _select_parents(self, population: List[Dict[str, Any]], fitness: List) -> None:
-        fitness_np = np.asarray(fitness, dtype=np.float32)
-
         if self.selection_type == "neutral":
             parents = self.rng.choice(len(population), size=self.n_children_per_step, replace=False)
         elif self.selection_type == "fitness":
-            probs = np.exp(fitness_np) / np.exp(fitness_np).sum()
+            # Stable softmax: https://stackoverflow.com/questions/42599498/numerically-stable-softmax
+            fitness_shifted = np.array(fitness) - max(fitness) 
+            probs = np.exp(fitness_shifted) / np.exp(fitness_shifted).sum()
             parents = self.rng.choice(len(population), p=probs, size=self.n_children_per_step, replace=True)
         else:
             raise NotImplementedError() 
@@ -140,13 +138,14 @@ class EvolutionSearchCV(BaseOptimizer):
         for _ in range(self.n_generations):
             parents = self._select_parents(population, fitness)
             for params in parents:
-                # Mutation 
-                params = self._mutate(params)
 
                 # Crossover 
                 other_id = self.rng.choice(len(parents))
                 other = parents[other_id]
                 params = self._crossover(params, other)
+
+                # Mutation 
+                params = self._mutate(params)
 
                 # Evaluate
                 score = self._evaluate_candidate(params, X, y)
