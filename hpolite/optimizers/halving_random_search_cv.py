@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Dict, List, Callable, Tuple
+from typing import Dict, List, Callable, Tuple, Any
 import copy
 
 from sklearn.base import BaseEstimator
@@ -53,13 +53,13 @@ class HalvingRandomSearchCV(BaseOptimizer):
         self.random_state = random_state
         self.rng = np.random.default_rng(random_state) 
 
-    def _sample_candidate(self) -> Dict[str, Categorical | Integer | Real]:
+    def _sample_candidate(self) -> Dict[str, Any]:
         params = {}
         for key, value in self.param_dict.items():
             params[key] = value.sample(self.rng)
         return params
 
-    def _sample_candidates(self) -> List[Dict[str, Categorical | Integer | Real]]:
+    def _sample_candidates(self) -> List[Dict[str, Any]]:
         return [self._sample_candidate() for _ in range(self.n_candidates)]
 
     def _sample_data(
@@ -79,7 +79,7 @@ class HalvingRandomSearchCV(BaseOptimizer):
 
     def _evaluate_candidate(
             self, 
-            params: Dict[str, Categorical | Integer | Real],
+            params: Dict[str, Any],
             X: np.ndarray,
             y: np.ndarray | None,
             n_resources: int

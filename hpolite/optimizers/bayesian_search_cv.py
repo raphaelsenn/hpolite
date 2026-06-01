@@ -47,7 +47,7 @@ class BayesianSearchCV(BaseOptimizer):
             params[key] = value.sample(self.rng)
         return params
 
-    def _encode_candidate(self, params: Dict[str, Categorical | Integer | Real]) -> np.ndarray:
+    def _encode_candidate(self, params: Dict[str, Any]) -> np.ndarray:
         encoded = []
         for key in self.param_dict:
             parameter_space = self.param_dict[key]  # Categorical, Integer or Real
